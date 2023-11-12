@@ -1,0 +1,213 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.text.CollationElementIterator;
+import java.util.*;
+import java.util.StringTokenizer;
+
+public class Main {
+
+
+    static int M = (int) (1e9) + 7;
+
+    public static void main(String[] args) {
+
+        FastReader s = new FastReader();
+        PrintWriter out = new PrintWriter(System.out);
+
+        int t = s.nextInt();
+
+        while(t > 0) {
+            t--;
+
+            int n = s.nextInt();
+            int c = s.nextInt();
+
+            int q = s.nextInt();
+
+            String st = s.next();
+
+          long len[][] = new long[c][2];
+          long query[][] = new long[c][2];
+          long brr[] = new long[q];
+
+          long cur = n;
+          for(int i = 0; i < c; i++){
+
+              long a = s.nextLong();
+              long b = s.nextLong();
+
+              query[i][0] = a;
+              query[i][1] = b;
+
+              long qlen = b - a + 1;
+
+              len[i][0] = cur+1;
+              len[i][1] =cur + qlen;
+              cur = len[i][1];
+
+          }
+
+          for(int i = 0; i < q; i++)brr[i] = s.nextLong();
+
+
+          for(int i = 0; i < q; i++){
+
+              long idx = brr[i];
+
+              for(int j = c-1; j >= 0; j--){
+
+                  if(idx >= len[j][0] && idx <= len[j][1]){
+
+                      long gap = idx - len[j][0];
+                      idx = query[j][0] + gap;
+                  }
+
+
+              }
+
+              out.println(st.charAt((int)idx -1));
+
+          }
+
+out.flush();
+
+
+            // end of while loop
+        }
+        //end
+    }
+
+
+    // function for fast sorting
+    public static void sort(int arr[]){
+        ArrayList<Integer> ll = new ArrayList<>();
+        for(int i = 0; i < arr.length; i++){
+            ll.add(arr[i]);
+        }
+        Collections.sort(ll);
+        for(int i = 0; i < ll.size(); i++){
+            arr[i] = ll.get(i);
+        }
+    }
+
+
+    // functions for precommuting
+//     mod  function very important
+    public static long mod(long x){
+
+
+
+        return ((x%M) + M)%M;
+    }
+    public static long  addmod(long a , long b){
+        return mod(mod(a)+mod(b));
+    }
+    public static long multiplymod(long a , long b){
+        return mod(mod(a)*mod(b));
+    }
+
+public static long powermod(long a , long b){
+
+        if(a == 0){
+            return 0;
+        }
+
+        if(b == 0){
+            return 1;
+        }
+        if(b == 1){
+           return a%mod(a);
+        }
+
+        long res = 1;
+        while( b > 0){
+            if(b%2 == 1){
+                res = multiplymod(res , a);
+
+            }
+            a = multiplymod(a , a);
+            b = b/2;
+        }
+
+return res;
+}
+
+//   array precomputation for calculating the factorial and also nCr
+
+//   static  int fact[] = new int[(int)(1e6) + 2];
+//    public static void precalc(){
+//        fact[0] = 1;
+//        for(int i = 1; i < fact.length; i++){
+//            fact[i] = (int) multiplymod(fact[i-1] , i);
+//        }
+//    }
+//
+//    public static long inv(long x){
+//        return powermod(x , M-2);
+//    }
+//     public static long divide(long aa ,long b){
+//        return multiplymod(aa , inv(b));
+//
+//     }
+//     public static long nCR(long n , long r){
+//
+//return divide(fact[(int)n],multiplymod(fact[(int)r] , fact[(int)(n-r)]) );
+//     }
+    // input method
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastReader()
+        {
+            br = new BufferedReader(
+                    new InputStreamReader(System.in));
+        }
+
+        String next()
+        {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() { return Integer.parseInt(next()); }
+
+        long nextLong() { return Long.parseLong(next()); }
+
+        double nextDouble()
+        {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine()
+        {
+            String str = "";
+            try {
+                if(st.hasMoreTokens()){
+                    str = st.nextToken("\n");
+                }
+                else{
+                    str = br.readLine();
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
+
+
+}
+
+
+// b inverse modulo M = b ki power M - 2;

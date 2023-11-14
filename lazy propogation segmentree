@@ -34,7 +34,7 @@ public :
 
         if(lazy[ind] != 0){
 
-              st[ind] = (high-low+1)*lazy[ind];
+              st[ind] += (high-low+1)*lazy[ind];
               // propogate it downwards
 
               if(low != high){
@@ -77,7 +77,7 @@ public :
 
  if(lazy[ind] != 0){
 
-              st[ind] = (high-low+1)*lazy[ind];
+              st[ind] += (high-low+1)*lazy[ind];
               // propogate it downwards
 
               if(low != high){

@@ -93,68 +93,56 @@ out.flush();
     }
 
 
-    // functions for precommuting
-//     mod  function very important
-    public static long mod(long x){
-
-
-
-        return ((x%M) + M)%M;
+// count inversions
+static int count = 0;
+    static long countInversions(long arr[], int N)
+    {
+        mergeSort(arr,0,N-1);
+        long temp = count;
+        count = 0;
+        return  temp;
     }
-    public static long  addmod(long a , long b){
-        return mod(mod(a)+mod(b));
+    static long[] mergeSort(long[] arr, int l, int h)
+    {
+        if(l==h)
+        {
+            long ans[] = new long[1];
+            ans[0] = arr[l];
+            return ans;
+        }
+        long[] left =  mergeSort(arr,l,(l+h)/2);
+        long[] right = mergeSort(arr,((l+h)/2)+1,h);
+
+        return merge(left,right);
     }
-    public static long multiplymod(long a , long b){
-        return mod(mod(a)*mod(b));
-    }
+    static long[] merge(long[] l, long r[])
+    {
+        int l1 = l.length, l2 = r.length;
+        long[] ans = new long[l1+l2];
+        int i=0,j=0,ind=0;
 
-public static long powermod(long a , long b){
-
-        if(a == 0){
-            return 0;
-        }
-
-        if(b == 0){
-            return 1;
-        }
-        if(b == 1){
-           return a%mod(a);
-        }
-
-        long res = 1;
-        while( b > 0){
-            if(b%2 == 1){
-                res = multiplymod(res , a);
-
+        while(i<l1||j<l2)
+        {
+            if(i==l1)
+                ans[ind++] = r[j++];
+            else if(j==l2)
+                ans[ind++] = l[i++];
+            else if(l[i]<r[j])
+                ans[ind++] = l[i++];
+            else
+            {
+                ans[ind++] = r[j++];
+                count += (l1-i);
             }
-            a = multiplymod(a , a);
-            b = b/2;
         }
+        return ans;
+    }
 
-return res;
-}
 
-//   array precomputation for calculating the factorial and also nCr
 
-//   static  int fact[] = new int[(int)(1e6) + 2];
-//    public static void precalc(){
-//        fact[0] = 1;
-//        for(int i = 1; i < fact.length; i++){
-//            fact[i] = (int) multiplymod(fact[i-1] , i);
-//        }
-//    }
-//
-//    public static long inv(long x){
-//        return powermod(x , M-2);
-//    }
-//     public static long divide(long aa ,long b){
-//        return multiplymod(aa , inv(b));
-//
-//     }
-//     public static long nCR(long n , long r){
-//
-//return divide(fact[(int)n],multiplymod(fact[(int)r] , fact[(int)(n-r)]) );
-//     }
+
+
+
     // input method
     static class FastReader {
         BufferedReader br;

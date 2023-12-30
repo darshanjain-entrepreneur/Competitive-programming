@@ -1,0 +1,17 @@
+    //bitwise method to find and in a range
+
+//    public static   long bitwise(long a , long b){
+//
+//        int count = 0;
+//
+//        while(a!=b){
+//
+//            a = a>>1;
+//            b = b>>1;
+//            count++;
+//
+//        }
+//
+//
+//        return a<<count;
+//   }

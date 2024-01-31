@@ -1,0 +1,74 @@
+package cptemplates;
+
+
+// in o(1) tells if a node lie in same component or not . primarilty used in dynamic graph
+// complexity of 4(alpha) ~ constant
+public class DSU {
+
+int size[];
+int parent[];
+
+public DSU(int n){
+
+    size = new int[n+1];
+    parent = new int[n+1];
+
+for(int i=0;i<=n;i++){
+    size[i]=1;
+    parent[i]=i;
+}
+}
+
+public int findparent(int node){
+    if(node == parent[node]){
+        return node;
+    }
+return parent[node] = findparent(parent[node]);
+
+}
+
+public void unionbySize(int u,int v){
+
+int parentu = findparent(u);
+int parentv = findparent(v);
+
+if(parentu == parentv)return;
+
+if(size[parentu] < size[parentv]){
+    parent[parentu] = parentv;
+    size[parentv]+=size[parentu];
+}else{
+
+    parent[parentv]=parentu;
+    size[parentu]+=size[parentv];
+}
+
+
+
+}
+
+    public static void main(String[] args) {
+        DSU d = new DSU(7);
+        d.unionbySize(1,2);
+        d.unionbySize(2,3);
+        d.unionbySize(4,5);
+        d.unionbySize(6,7);
+        d.unionbySize(5,6);
+
+        if(d.findparent(3) == d.findparent(7)){
+            System.out.println("same");
+        }else{
+            System.out.println("not same");
+        }
+
+        d.unionbySize(3,7);
+        if(d.findparent(3) == d.findparent(7)){
+            System.out.println("same");
+        }else{
+            System.out.println("not same");
+        }
+
+    }
+
+
+}

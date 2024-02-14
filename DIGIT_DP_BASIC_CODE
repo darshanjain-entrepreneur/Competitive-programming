@@ -1,0 +1,77 @@
+public class Main {
+
+
+
+
+
+    public static void main(String[] args) {
+
+        FastReader s = new FastReader();
+        PrintWriter out = new PrintWriter(System.out);
+
+
+        int t = s.nextInt();
+
+        while(t  > 0){
+            t--;
+
+
+            int num = s.nextInt();  int sum = s.nextInt();
+            String a = String.valueOf(num);
+            int n = a.length();
+
+            int dp[][][] = new int[n+1][sum+1][2];
+
+            for(int row[][] : dp){
+
+                for(int col[]: row){
+
+                    Arrays.fill(col , -1);
+                }
+            }
+
+
+           long ans = (solve(n , sum  , 1 , a, dp));
+
+            System.out.println(ans);
+
+
+
+            // end of while loop
+        }
+
+
+    }
+
+    private static int  solve(int n, int X ,int tight , String a ,  int dp[][][]) {
+
+
+
+
+        if(n == 0){
+
+            if(X == 0){
+
+                return 1;
+            }
+           return 0;
+        }
+
+        if(dp[n][X][tight] != -1)return dp[n][X][tight];
+
+
+int ans = 0;
+int bound = tight == 1 ? (int)(a.charAt(a.length() - n) - '0') : 9;
+
+        for(int j = 0; j <=bound; j++){
+
+            if(j <= X){
+                  int b = j == bound ? 1 : 0;
+                ans = ans + solve(n-1 , X-j , b , a , dp);
+            }
+
+        }
+
+return dp[n][X][tight] =  ans;
+
+    }

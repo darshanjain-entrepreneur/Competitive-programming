@@ -1,0 +1,45 @@
+ class StringHash {
+    private long[] ps1, ps2;
+    private final long Q1 = 271, Q2 = 277, M1 = 1_000_000_007, M2 = 998_244_353;
+
+    public StringHash(String s) {
+        ps1 = new long[s.length() + 1];
+        ps2 = new long[s.length() + 1];
+        Arrays.fill(ps1, 0);
+        Arrays.fill(ps2, 0);
+        for (int i = 1; i <= s.length(); i++) {
+            long c = s.charAt(i - 1) + 1;
+            ps1[i] = ((Q1 * ps1[i - 1]) + c) % M1;
+            ps2[i] = ((Q2 * ps2[i - 1]) + c) % M2;
+        }
+    }
+
+    private long powxy(long x, long y, long M) {
+        if (y == 0) return 1;
+        if (y % 2 == 1) return (x * powxy(x, y - 1, M)) % M;
+        long t = powxy(x, y / 2, M);
+        return (t * t) % M;
+    }
+
+    public long substrHash1(int firstIndex, int lastIndex) {
+        long rem = (powxy(Q1, lastIndex - firstIndex + 1, M1) * ps1[firstIndex]) % M1;
+        return (ps1[lastIndex + 1] - rem + M1) % M1;
+    }
+
+    public long substrHash2(int firstIndex, int lastIndex) {
+        long rem = (powxy(Q2, lastIndex - firstIndex + 1, M2) * ps2[firstIndex]) % M2;
+        return (ps2[lastIndex + 1] - rem + M2) % M2;
+    }
+
+   public String substrHash(int firstIndex, int lastIndex) {
+    long hash1 = substrHash1(firstIndex, lastIndex);
+    long hash2 = substrHash2(firstIndex, lastIndex);
+    return hash1 + "+" + hash2;
+}
+
+    // public static void main(String[] args) {
+    //     String s = "example";
+    //     StringHash stringHash = new StringHash(s);
+    //     System.out.println(Arrays.toString(stringHash.substrHash(0, 3))); // Example usage
+    // }
+}

@@ -1,0 +1,321 @@
+
+
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.util.*;
+import java.util.StringTokenizer;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        FastReader s = new FastReader();
+        PrintWriter out = new PrintWriter(System.out);
+
+
+        int t = s.nextInt();
+
+        while(t  > 0) {
+
+            t--;
+
+
+
+
+            // while loop
+        }
+
+    }
+
+
+
+    // gcd and lcm
+
+//    private static long lcm(long a,long b) {
+//
+//        long x = a*b;
+//
+//        long gcdd  = gcd(a,b);
+//
+//        long lcmm = x/gcdd;
+//        return lcmm;
+//
+//    }
+//
+//    private static long gcdd(long a, long b) {
+//        if(b == 0){
+//
+//            return a;
+//        }
+//
+//        return gcdd(b , a%b);
+//    }
+
+
+    // to find modulo inverse
+
+//    public static long moduloinverse(long a , int M){
+//
+//
+//        return binaryexpo(a ,M-2 , M );
+//
+//    }
+
+
+
+//public static long modcalc(long a , long b , int M , int num){
+//
+//       a = a%M;
+//       b = b%M;
+//
+//if(num == 0){
+//
+//    return (a+b)%M;
+//}else if(num == 1){
+//
+//    return (a*b)%M;
+//
+//}
+//
+//return (a-b+M)%M;
+//
+//
+//}
+
+
+//     binary expo to calculate power with modulo
+//   public static long  binaryexpo(long a , long b , int M){
+//
+//        if(b == 0){
+//            return 1;
+//        }
+//
+//
+//        long res = binaryexpo(a , b/2 , M);
+//
+//        if((b&1) == 1){
+//            return (a * ((res*res)%M))%M;
+//        }else{
+//
+//            return (res*res)%M;
+//        }
+//
+//
+//   }
+//
+
+
+
+
+    // new way t find smallest prime number using sieve in much faster way
+
+//    long primes[] = new long[(int)(1e7)+1];
+//
+//    primes[0] = 0;
+//    primes[1] = 1;
+//
+//        for(int i = 2; i<= (int)(1e7); i++){
+//
+//        primes[i] = i;
+//    }
+//
+//
+//        for(long i = 2; i<=(int)(1e7); i++){
+//
+//        if(primes[(int) i] == i){
+//
+//            for(long j = i*i; j<=(int)(1e7); j= j+i){
+//
+//                if(primes[(int) j]==j){
+//                    primes[(int) j] = i;
+//                }
+//
+//            }
+//
+//        }
+//
+//
+//    }
+
+
+
+
+
+
+
+
+
+
+
+    // bitwise xor 1 to n
+
+//    public  static long bitwisexor(long n){
+//
+//        if(n%4 == 0){
+//            return n;
+//        }
+//        if(n%4 == 1){
+//            return 1;
+//        }
+//        if(n%4 == 2){
+//            return n+1;
+//        }
+//        if(n%4 == 3){
+//            return 0;
+//        }
+//
+//        return -1;
+//    }
+
+
+
+
+    //bitwise method to find and in a range
+
+//    public static   long bitwise(long a , long b){
+//
+//        int count = 0;
+//
+//        while(a!=b){
+//
+//            a = a>>1;
+//            b = b>>1;
+//            count++;
+//
+//        }
+//
+//
+//        return a<<count;
+//    }
+
+
+
+
+
+    // precomputation
+
+
+    // count inversions
+
+//    static long countInversions(long arr[], int N)
+//    {
+//        mergeSort(arr,0,N-1);
+//        long temp = count;
+//        count = 0;
+//        return  temp;
+//    }
+//    static long[] mergeSort(long[] arr, int l, int h)
+//    {
+//        if(l==h)
+//        {
+//            long ans[] = new long[1];
+//            ans[0] = arr[l];
+//            return ans;
+//        }
+//        long[] left =  mergeSort(arr,l,(l+h)/2);
+//        long[] right = mergeSort(arr,((l+h)/2)+1,h);
+//
+//        return merge(left,right);
+//    }
+//    static long[] merge(long[] l, long r[])
+//    {
+//        int l1 = l.length, l2 = r.length;
+//        long[] ans = new long[l1+l2];
+//        int i=0,j=0,ind=0;
+//
+//        while(i<l1||j<l2)
+//        {
+//            if(i==l1)
+//                ans[ind++] = r[j++];
+//            else if(j==l2)
+//                ans[ind++] = l[i++];
+//            else if(l[i]<r[j])
+//                ans[ind++] = l[i++];
+//            else
+//            {
+//                ans[ind++] = r[j++];
+//                count += (l1-i);
+//            }
+//        }
+//        return ans;
+//    }
+
+
+
+    // function for fast sorting
+    public static void sort(long  arr[]){
+        ArrayList<Long> ll = new ArrayList<>();
+        for(int i = 0; i < arr.length; i++){
+            ll.add(arr[i]);
+        }
+        Collections.sort(ll);
+        Collections.reverse(ll);
+        for(int i = 0; i < ll.size(); i++){
+            arr[i] = ll.get(i);
+        }
+        ll.clear();
+    }
+
+
+    // input method
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastReader()
+        {
+            br = new BufferedReader(
+                    new InputStreamReader(System.in));
+        }
+
+        String next()
+        {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() { return Integer.parseInt(next()); }
+
+        long nextLong() { return Long.parseLong(next()); }
+
+        double nextDouble()
+        {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine()
+        {
+            String str = "";
+            try {
+                if(st.hasMoreTokens()){
+                    str = st.nextToken("\n");
+                }
+                else{
+                    str = br.readLine();
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
+
+
+
+}
+
+
+// b inverse modulo M = b ki power M - 2;

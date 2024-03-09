@@ -1,0 +1,29 @@
+  private static void dfs(int cur, boolean[] vis, ArrayList<ArrayList<Integer>> graph, int[] tin, int[] lo, HashSet<String> bridge, int par) {
+
+        vis[cur] = true;
+
+        tin[cur] = lo[cur] = timer++;
+
+        for(Integer it : graph.get(cur)){
+
+
+            if(it == par)continue;
+
+            if(vis[it]){
+
+                lo[cur] = Math.min(lo[cur] , tin[it]);
+            }else{
+
+                dfs(it , vis , graph , tin , lo , bridge , cur);
+                lo[cur] = Math.min(lo[cur] , lo[it]);
+                if(lo[it] > tin[cur]){
+                    bridge.add(cur+""+it);
+                }
+            }
+
+        }
+
+
+
+
+    }

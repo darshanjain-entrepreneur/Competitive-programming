@@ -1,0 +1,54 @@
+ class Hash {
+    final int p = 31, m = 1000000007;
+    int[] prefixHash;
+    int[] suffixHash;
+
+    public Hash(String S) {
+        int n = S.length();
+        prefixHash = new int[n];
+        suffixHash = new int[n];
+
+        long p_pow = 1;
+        int prefixHashSoFar = 0;
+        int suffixHashSoFar = 0;
+
+        for (int i = 0; i < n; i++) {
+            prefixHashSoFar = (int) ((prefixHashSoFar + (S.charAt(i) - 'a' + 1) * p_pow) % m);
+            prefixHash[i] = prefixHashSoFar;
+            p_pow = (p_pow * p) % m;
+        }
+
+        p_pow = 1; // Reset p_pow for suffix hash calculation
+        for (int i = n - 1; i >= 0; i--) {
+            suffixHashSoFar = (int) ((suffixHashSoFar + (S.charAt(i) - 'a' + 1) * p_pow) % m);
+            suffixHash[i] = suffixHashSoFar;
+            p_pow = (p_pow * p) % m;
+        }
+    }
+
+    // Method to get the prefix hash value at index i
+    public int getPrefixHash(int i) {
+        if (i < 0 || i >= prefixHash.length) {
+            throw new IllegalArgumentException("Invalid index");
+        }
+        return prefixHash[i];
+    }
+
+    // Method to get the suffix hash value at index i
+    public int getSuffixHash(int i) {
+        if (i < 0 || i >= suffixHash.length) {
+            throw new IllegalArgumentException("Invalid index");
+        }
+        return suffixHash[i];
+    }
+
+    public static void main(String[] args) {
+        String str = "baab";
+        Hash hash = new Hash(str);
+
+        System.out.println(hash.getPrefixHash(0));
+        System.out.println(hash.getPrefixHash(2) - hash.getPrefixHash(1));
+        System.out.println(hash.getSuffixHash(1) - hash.getSuffixHash(2));
+
+    }
+}

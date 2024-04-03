@@ -1,0 +1,63 @@
+import java.util.ArrayList;
+
+public class t{
+    static int dia = 0;
+    public static void main(String[] args) {
+
+        ArrayList<ArrayList<Integer>> ll = new ArrayList<>();
+
+        for(int i=0;i<=4;i++)ll.add(new ArrayList<>());
+
+        ll.get(1).add(2);
+        ll.get(2).add(1);
+        ll.get(3).add(1);
+        ll.get(1).add(3);
+        ll.get(2).add(4);
+        ll.get(4).add(2);
+
+        dia = 0;
+        solve(1 , 0 , ll);
+        System.out.println(dia);
+
+
+
+    }
+
+
+    public static int  solve(int u , int par , ArrayList<ArrayList<Integer>> ll ){
+
+        int dch = -1;
+        int sdch = -1;
+
+        for(Integer it : ll.get(u)){
+
+            if(it == par)continue;
+
+            int ch = solve(it , u , ll);
+
+            if(ch>dch){
+                sdch = dch;
+                dch = ch;
+            }else if(ch > sdch){
+                sdch = ch;
+            }
+
+
+
+        }
+
+
+        if(dch+sdch+2>dia){
+
+            dia = dch+2+sdch;
+        }
+
+      dch+=1;
+
+        return dch;
+
+    }
+
+
+}
+

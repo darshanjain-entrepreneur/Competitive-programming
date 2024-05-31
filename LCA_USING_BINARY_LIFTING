@@ -1,0 +1,198 @@
+public class Main {
+
+
+    /*
+
+        combination it can perform
+        // 1st   2 alone if all even
+        // 2nd 3 alone try it if possible
+        // 3 one alone  do it
+        // 4 1 and 2 combination
+          5   and 3 and 1 combination
+          6   3 and 2 combination and if something left then use 1
+          7 use 3  2 and 1
+
+
+     */
+
+
+
+
+
+// start solving more 1900 - 2100 rated problems to reach master on codeforces
+// try solving hard dp problems and graph problems to improve and don't fear that
+// you can;t do it just believe in your self and you will be able to do it.
+    // if string s than think about hashing
+    // if nothing is you are getting then thinks about brute force
+
+
+
+    public static void main(String[] args) {
+
+
+        FastReader s = new FastReader();
+        PrintWriter out = new PrintWriter(System.out);
+
+
+        int T = 1;
+
+//        T = s.nextInt();
+
+        while (T > 0) {
+            T--;
+
+
+            int n = s.nextInt();
+
+            int q = s.nextInt();
+
+            ArrayList<ArrayList<Integer>> ll = new ArrayList<>();
+
+            ArrayList<int[]> query =new ArrayList<>();
+
+            for(int i = 0; i <n; i++)ll.add(new ArrayList<>());
+
+            for(int i = 1;i<n; i++){
+
+                int x = s.nextInt()-1;
+                ll.get(x).add(i);
+
+            }
+
+            for(int i = 0; i < q;i++){
+                int a = s.nextInt()-1; int b = s.nextInt()-1;
+                query.add(new int[]{a , b});
+            }
+
+
+int parent[][] = new int[n][21];
+            for(int row[] : parent){
+                Arrays.fill(row,-1);
+            }
+
+            int level[] = new int[n];
+
+            dfs(0 , -1 , ll , parent , level);
+
+            // now apply binary lifting
+
+            for(int i=1; i <= 20; i++){
+
+
+               for(int node=1; node < n; node++){
+
+                   int v = parent[node][i-1];
+
+                   if(v!= -1){
+                       parent[node][i] = parent[v][i-1];
+                   }
+
+
+               }
+
+
+            }
+
+
+
+
+           for(int i = 0; i < q; i++){
+
+               int u  = query.get(i)[0]; int v = query.get(i)[1];
+                int ans=-1;
+               if(level[u] < level[v]){
+
+                  ans =  find(v , u , level , parent);
+
+
+               }else{
+                   ans = find(u , v ,level, parent);
+               }
+
+              if(ans!=-1){
+                  ans++;
+              }
+               System.out.println(ans);
+           }
+
+
+
+
+//        end of while loop
+        }
+    }
+
+    private static int find(int u, int v , int level[] , int parent[][]) {
+
+
+        int diff = level[u] - level[v];
+
+        for(int i = 0; i <=20; i++){
+
+            if((diff &(1<<i)) >=1){
+                u = parent[u][i];
+            }
+
+        }
+
+
+        if(u ==v){
+
+            return u;
+        }
+
+        for(int i=20;i>=0;i--){
+
+            if(parent[u][i] != parent[v][i]){
+
+                u = parent[u][i];
+                v = parent[v][i];
+            }
+
+        }
+
+return parent[u][0];
+    }
+
+
+    private static  int  solve(int x, int k , int parent[][]) {
+
+        int node = x;
+
+        for(int j=0;j<=20 && node != -1; j++){
+
+            if((k &(1<<j)) >=1 ){
+
+                node =  parent[node][j];
+
+            }
+
+
+        }
+return node;
+
+    }
+
+    private static void dfs(int i, int par, ArrayList<ArrayList<Integer>> ll, int[][] parent,int level[]) {
+
+
+
+        for(Integer it : ll.get(i)){
+
+            if(it!= par){
+
+
+                level[it] = level[i]+1;
+                dfs(it , i , ll , parent , level);
+                parent[it][0] = i;
+
+
+            }
+
+
+        }
+
+
+
+
+    }

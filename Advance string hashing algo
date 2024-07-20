@@ -1,0 +1,113 @@
+ public static final long P = 31;  // A prime number used as the base for hashing
+    public  static final long M = 1_000_000_009;  // A large prime number used as the modulus
+    public  static final int N = 100005;  // Maximum length of the string
+    public static  List<Long> pPow;
+    public  static List<Long> invPPow;
+
+    private  static long fastPower(long a, long b) {
+        long ans = 1;
+        while (b != 0) {
+            if ((b & 1) != 0) {
+                ans = (ans * a) % M;
+            }
+            a = (a * a) % M;
+            b /= 2;
+        }
+        return ans;
+    }
+
+    public static  void computePower() {
+        if (!pPow.isEmpty() && pPow.get(0) != 1L) return;
+
+        for (int i = 1; i < N; i++) {
+            pPow.set(i, (pPow.get(i - 1) * P) % M);
+        }
+
+        invPPow.set(N - 1, fastPower(pPow.get(N - 1), M - 2));
+        for (int i = N - 2; i > 0; i--) {
+            invPPow.set(i, (invPPow.get(i + 1) * P) % M);
+        }
+    }
+   static  class StringHasher {
+
+
+        private String s;
+        private int sLen;
+        private List<Long> sHash;
+
+        public StringHasher() {
+
+        }
+
+        // a^b % M
+
+
+        public List<Long> hashIt(String s) {
+            this.s = s;
+            this.sLen = s.length();
+            List<Long> prefixHash = new ArrayList<>(Collections.nCopies(sLen + 1, 0L));
+
+            for (int i = 1; i <= sLen; i++) {
+                long cur = (pPow.get(i) * (s.charAt(i - 1) - 'a' + 1)) % M;
+                prefixHash.set(i, (prefixHash.get(i - 1) + cur) % M);
+            }
+            this.sHash = prefixHash;
+            return prefixHash;
+        }
+
+        public long hashOfRange(int l, int r) {
+            if (r > sLen) return -1;
+
+            long hash = (sHash.get(r) - sHash.get(l - 1) + M) % M;
+            return (hash * invPPow.get(l - 1)) % M;
+        }
+
+//        public static void main(String[] args) {
+//            // Example usage
+//            StringHasher hasher = new StringHasher();
+//
+//            // Precompute powers and inverses
+//            hasher.computePower();
+//
+//            // Hash the string
+//            String exampleString = "hello";
+//            hasher.hashIt(exampleString);
+//
+//            // Print all substrings' hashes
+//            System.out.println("Hashes of all substrings:");
+//            for (int l = 1; l <= exampleString.length(); l++) {
+//                for (int r = l; r <= exampleString.length(); r++) {
+//                    long substringHash = hasher.hashOfRange(l, r);
+//                    System.out.println("Hash of substring [" + (l-1) + ".." + (r-1) + "]: " + substringHash);
+//                }
+//            }
+//        }
+    }
+
+    public static void main(String[] args) {
+
+        pPow = new ArrayList<>(Collections.nCopies(N, 1L));
+        invPPow = new ArrayList<>(Collections.nCopies(N, 1L));
+
+        computePower();
+
+       StringHasher s1 = new StringHasher();
+       StringHasher s2 = new StringHasher();
+
+
+
+
+       String a= "abcdef";
+       String b = "aabc";
+
+       s1.hashIt(a);
+       s2.hashIt(b);
+
+
+       long x = s1.hashOfRange(1,3);
+       long y = s2.hashOfRange(2,4);
+
+        System.out.println(x + " "+y);
+
+
+    }

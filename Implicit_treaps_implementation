@@ -1,0 +1,257 @@
+import java.math.BigInteger;
+import java.util.*;
+import java.util.Random;
+
+public class t{
+
+  
+
+ static class TreapNode {
+        int value;
+        int priority;
+        int size;
+        int sum;
+        int max;
+        int min;
+        boolean reversed;
+        TreapNode left, right;
+
+        public TreapNode(int value) {
+            this.value = value;
+            this.priority = new Random().nextInt();
+            this.size = 1;
+            this.sum = value;
+            this.max = value;
+            this.min = value;
+            this.reversed = false;
+            this.left = null;
+            this.right = null;
+        }
+    }
+
+   static  class ImplicitTreap {
+        private TreapNode root;
+
+        private int getSize(TreapNode node) {
+            return node == null ? 0 : node.size;
+        }
+
+        private int getSum(TreapNode node) {
+            return node == null ? 0 : node.sum;
+        }
+
+        private int getMax(TreapNode node) {
+            return node == null ? Integer.MIN_VALUE : node.max;
+        }
+
+        private int getMin(TreapNode node) {
+            return node == null ? Integer.MAX_VALUE : node.min;
+        }
+
+        private void updateSize(TreapNode node) {
+            if (node != null) {
+                node.size = getSize(node.left) + getSize(node.right) + 1;
+                node.sum = getSum(node.left) + getSum(node.right) + node.value;
+                node.max = Math.max(node.value, Math.max(getMax(node.left), getMax(node.right)));
+                node.min = Math.min(node.value, Math.min(getMin(node.left), getMin(node.right)));
+            }
+        }
+
+        private void propagate(TreapNode node) {
+            if (node != null && node.reversed) {
+                TreapNode temp = node.left;
+                node.left = node.right;
+                node.right = temp;
+                if (node.left != null) node.left.reversed = !node.left.reversed;
+                if (node.right != null) node.right.reversed = !node.right.reversed;
+                node.reversed = false;
+            }
+        }
+
+        private TreapNode merge(TreapNode left, TreapNode right) {
+            propagate(left);
+            propagate(right);
+            if (left == null) return right;
+            if (right == null) return left;
+            if (left.priority > right.priority) {
+                left.right = merge(left.right, right);
+                updateSize(left);
+                return left;
+            } else {
+                right.left = merge(left, right.left);
+                updateSize(right);
+                return right;
+            }
+        }
+
+        private void split(TreapNode node, int key, TreapNode[] result) {
+            if (node == null) {
+                result[0] = result[1] = null;
+                return;
+            }
+            propagate(node);
+            int currentKey = getSize(node.left);
+            if (key <= currentKey) {
+                split(node.left, key, result);
+                node.left = result[1];
+                result[1] = node;
+            } else {
+                split(node.right, key - currentKey - 1, result);
+                node.right = result[0];
+                result[0] = node;
+            }
+            updateSize(node);
+        }
+
+        public void insert(int index, int value) {
+            TreapNode newNode = new TreapNode(value);
+            TreapNode[] splitResult = new TreapNode[2];
+            split(root, index, splitResult);
+            root = merge(merge(splitResult[0], newNode), splitResult[1]);
+        }
+
+        public void delete(int index) {
+            TreapNode[] splitResult1 = new TreapNode[2];
+            TreapNode[] splitResult2 = new TreapNode[2];
+            split(root, index, splitResult1);
+            split(splitResult1[1], 1, splitResult2);
+            root = merge(splitResult1[0], splitResult2[1]);
+        }
+
+        public int get(int index) {
+            TreapNode node = root;
+            while (node != null) {
+                propagate(node);
+                int currentKey = getSize(node.left);
+                if (index == currentKey) {
+                    return node.value;
+                } else if (index < currentKey) {
+                    node = node.left;
+                } else {
+                    node = node.right;
+                    index -= currentKey + 1;
+                }
+            }
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+
+        public void set(int index, int value) {
+            TreapNode node = root;
+            while (node != null) {
+                propagate(node);
+                int currentKey = getSize(node.left);
+                if (index == currentKey) {
+                    node.value = value;
+                    updateSize(node);
+                    return;
+                } else if (index < currentKey) {
+                    node = node.left;
+                } else {
+                    node = node.right;
+                    index -= currentKey + 1;
+                }
+            }
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+
+        public int size() {
+            return getSize(root);
+        }
+
+        public int rangeSum(int l, int r) {
+            TreapNode[] splitResult1 = new TreapNode[2];
+            TreapNode[] splitResult2 = new TreapNode[2];
+            split(root, l, splitResult1);
+            split(splitResult1[1], r - l + 1, splitResult2);
+            int result = getSum(splitResult2[0]);
+            root = merge(merge(splitResult1[0], splitResult2[0]), splitResult2[1]);
+            return result;
+        }
+
+        public int rangeMax(int l, int r) {
+            TreapNode[] splitResult1 = new TreapNode[2];
+            TreapNode[] splitResult2 = new TreapNode[2];
+            split(root, l, splitResult1);
+            split(splitResult1[1], r - l + 1, splitResult2);
+            int result = getMax(splitResult2[0]);
+            root = merge(merge(splitResult1[0], splitResult2[0]), splitResult2[1]);
+            return result;
+        }
+
+        public int rangeMin(int l, int r) {
+            TreapNode[] splitResult1 = new TreapNode[2];
+            TreapNode[] splitResult2 = new TreapNode[2];
+            split(root, l, splitResult1);
+            split(splitResult1[1], r - l + 1, splitResult2);
+            int result = getMin(splitResult2[0]);
+            root = merge(merge(splitResult1[0], splitResult2[0]), splitResult2[1]);
+            return result;
+        }
+
+        public void reverseRange(int l, int r) {
+            TreapNode[] splitResult1 = new TreapNode[2];
+            TreapNode[] splitResult2 = new TreapNode[2];
+            split(root, l, splitResult1);
+            split(splitResult1[1], r - l + 1, splitResult2);
+            if (splitResult2[0] != null) {
+                splitResult2[0].reversed = !splitResult2[0].reversed;
+            }
+            root = merge(merge(splitResult1[0], splitResult2[0]), splitResult2[1]);
+        }
+
+        // In-order traversal for testing
+        public void inOrder() {
+            inOrder(root);
+            System.out.println();
+        }
+
+        private void inOrder(TreapNode node) {
+            if (node != null) {
+                propagate(node);
+                inOrder(node.left);
+                System.out.print(node.value + " ");
+                inOrder(node.right);
+            }
+        }
+
+//        public static void main(String[] args) {
+//            ImplicitTreap treap = new ImplicitTreap();
+//            treap.insert(0, 10);
+//            treap.insert(1, 20);
+//            treap.insert(2, 30);
+//            treap.insert(1, 15);
+//
+//            treap.inOrder(); // Expected output: 10 15 20 30
+//
+//            System.out.println("Value at index 2: " + treap.get(2)); // Expected output: 20
+//
+//            treap.set(2, 25);
+//            treap.inOrder(); // Expected output: 10 15 25 30
+//
+//            treap.delete(1);
+//            treap.inOrder(); // Expected output: 10 25 30
+//
+//            System.out.println("Size: " + treap.size()); // Expected output: 3
+//
+//            System.out.println("Sum of range [1, 2]: " + treap.rangeSum(1, 2)); // Expected output: 55
+//
+//            System.out.println("Max of range [0, 2]: " + treap.rangeMax(0, 2)); // Expected output: 30
+//
+//            System.out.println("Min of range [0, 2]: " + treap.rangeMin(0, 2)); // Expected output: 10
+//
+//            treap.reverseRange(0, 2);
+//            treap.inOrder(); // Expected output: 30 25 10
+//        }
+    }
+
+
+
+    public static void main(String[] args) {
+        ImplicitTreap treap = new ImplicitTreap();
+     
+
+    }
+
+
+}
+

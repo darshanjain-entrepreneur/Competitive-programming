@@ -1,0 +1,216 @@
+ static class AVLTreeWithDuplicates {
+        private class Node {
+            long value;
+            Node left, right;
+            int height;
+            int size; // Total count of this node and its children
+            int count; // Frequency of this value
+
+            Node(long value) {
+                this.value = value;
+                this.height = 1;
+                this.size = 1;
+                this.count = 1;
+            }
+        }
+
+        private Node root;
+        private TreeMap<Long, Integer> frequencyMap = new TreeMap<>();
+
+        // Get the height of the node
+        private int height(Node node) {
+            return node == null ? 0 : node.height;
+        }
+
+        // Get the size of the node
+        private int size(Node node) {
+            return node == null ? 0 : node.size;
+        }
+
+        // Right rotate the subtree rooted with y
+        private Node rightRotate(Node y) {
+            Node x = y.left;
+            Node T2 = x.right;
+
+            // Perform rotation
+            x.right = y;
+            y.left = T2;
+
+            // Update heights and sizes
+            y.height = Math.max(height(y.left), height(y.right)) + 1;
+            x.height = Math.max(height(x.left), height(x.right)) + 1;
+            y.size = size(y.left) + size(y.right) + y.count;
+            x.size = size(x.left) + size(x.right) + x.count;
+
+            return x;
+        }
+
+        // Left rotate the subtree rooted with x
+        private Node leftRotate(Node x) {
+            Node y = x.right;
+            Node T2 = y.left;
+
+            // Perform rotation
+            y.left = x;
+            x.right = T2;
+
+            // Update heights and sizes
+            x.height = Math.max(height(x.left), height(x.right)) + 1;
+            y.height = Math.max(height(y.left), height(y.right)) + 1;
+            x.size = size(x.left) + size(x.right) + x.count;
+            y.size = size(y.left) + size(y.right) + y.count;
+
+            return y;
+        }
+
+        // Get balance factor of node
+        private int getBalance(Node node) {
+            return node == null ? 0 : height(node.left) - height(node.right);
+        }
+
+        // Balance the node
+        private Node balance(Node node) {
+            if (node == null) {
+                return null;
+            }
+
+            int balanceFactor = getBalance(node);
+
+            // Left heavy
+            if (balanceFactor > 1) {
+                if (getBalance(node.left) < 0) {
+                    node.left = leftRotate(node.left);
+                }
+                return rightRotate(node);
+            }
+
+            // Right heavy
+            if (balanceFactor < -1) {
+                if (getBalance(node.right) > 0) {
+                    node.right = rightRotate(node.right);
+                }
+                return leftRotate(node);
+            }
+
+            return node;
+        }
+
+        // Insert a value into the AVL tree
+        public void insert(long value) {
+            root = insert(root, value);
+            frequencyMap.put(value, frequencyMap.getOrDefault(value, 0) + 1);
+        }
+
+        private Node insert(Node node, long value) {
+            if (node == null) {
+                return new Node(value);
+            }
+
+            if (value < node.value) {
+                node.left = insert(node.left, value);
+            } else if (value > node.value) {
+                node.right = insert(node.right, value);
+            } else {
+                node.count++; // Increment count of the existing value
+            }
+
+            // Update height and size
+            node.height = Math.max(height(node.left), height(node.right)) + 1;
+            node.size = size(node.left) + size(node.right) + node.count;
+
+            // Balance the node
+            return balance(node);
+        }
+
+        // Delete a value from the AVL tree
+        public void delete(long value) {
+            root = delete(root, value);
+            int count = frequencyMap.getOrDefault(value, 0);
+            if (count > 1) {
+                frequencyMap.put(value, count - 1);
+            } else {
+                frequencyMap.remove(value);
+            }
+        }
+
+        private Node delete(Node node, long value) {
+            if (node == null) {
+                return null;
+            }
+
+            if (value < node.value) {
+                node.left = delete(node.left, value);
+            } else if (value > node.value) {
+                node.right = delete(node.right, value);
+            } else {
+                if (node.count > 1) {
+                    node.count--; // Decrease count if there are duplicates
+                } else {
+                    if (node.left == null || node.right == null) {
+                        node = (node.left != null) ? node.left : node.right;
+                    } else {
+                        Node temp = minValueNode(node.right);
+                        node.value = temp.value;
+                        node.right = delete(node.right, temp.value);
+                    }
+                }
+            }
+
+            if (node == null) {
+                return null;
+            }
+
+            // Update height and size
+            node.height = Math.max(height(node.left), height(node.right)) + 1;
+            node.size = size(node.left) + size(node.right) + node.count;
+
+            // Balance the node
+            return balance(node);
+        }
+
+        // Find the node with the minimum value
+        private Node minValueNode(Node node) {
+            Node current = node;
+            while (current.left != null) {
+                current = current.left;
+            }
+            return current;
+        }
+
+        // Find the number of elements less than a given value
+        public int countLessThan(long value) {
+            return countLessThan(root, value);
+        }
+
+        private int countLessThan(Node node, long value) {
+            if (node == null) {
+                return 0;
+            }
+
+            if (value <= node.value) {
+                return countLessThan(node.left, value);
+            } else {
+                return size(node.left) + node.count + countLessThan(node.right, value);
+            }
+        }
+
+        // Find the number of elements greater than a given value
+        public int countGreaterThan(long value) {
+            return countGreaterThan(root, value);
+        }
+
+        private int countGreaterThan(Node node, long value) {
+            if (node == null) {
+                return 0;
+            }
+
+            if (value >= node.value) {
+                return countGreaterThan(node.right, value);
+            } else {
+                return size(node.right) + node.count + countGreaterThan(node.left, value);
+            }
+        }
+    }
+
+
+

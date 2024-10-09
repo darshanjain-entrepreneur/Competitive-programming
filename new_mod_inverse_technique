@@ -1,0 +1,8 @@
+ll helper(ll n, ll mod) {
+    ll a = n % mod;
+    ll b = (n - 1) % mod;
+    ll c = (a * b) % mod;
+    ll d = ((mod + 1) / 2) % mod;
+    ll e = (c * d) % mod;
+    return e;
+}

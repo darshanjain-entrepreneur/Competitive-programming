@@ -1,4 +1,4 @@
- static class AVLTreeWithDuplicates {
+  static class AVLTreeWithDuplicates {
         private class Node {
             long value;
             Node left, right;
@@ -210,7 +210,28 @@
                 return size(node.right) + node.count + countGreaterThan(node.left, value);
             }
         }
+
+        // Find the value at a given index (0-based index)
+        public long findValueAtIndex(int index) {
+            return findValueAtIndex(root, index);
+        }
+
+        private long findValueAtIndex(Node node, int index) {
+            if (node == null) {
+                throw new IndexOutOfBoundsException("Index is out of bounds");
+            }
+
+            int leftSize = size(node.left); // Size of the left subtree
+
+            if (index < leftSize) {
+                // The index is in the left subtree
+                return findValueAtIndex(node.left, index);
+            } else if (index < leftSize + node.count) {
+                // The index corresponds to this node's value
+                return node.value;
+            } else {
+                // The index is in the right subtree
+                return findValueAtIndex(node.right, index - leftSize - node.count);
+            }
+        }
     }
-
-
-

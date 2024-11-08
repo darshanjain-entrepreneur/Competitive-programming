@@ -1,0 +1,149 @@
+public static void main(String[] args) {
+
+        int T = 1;
+
+//        T = s.nextInt();
+
+
+
+//        long startTime = System.nanoTime();
+
+
+        // starting of while loop
+        outer:while (T > 0) {
+            T--;
+
+            int n = s.nextInt();
+            int m = s.nextInt();
+
+       
+
+            createGraph(n);
+            createGraph(n);
+            ArrayList<int[]> ll = new ArrayList<>();
+            for(int i = 0 ; i < m; i++){
+                int a = s.nextInt();
+                int b = s.nextInt();
+                ll.add(new int[]{b , a});
+                g1[a].add(b);
+            }
+
+            Stack<Integer> st = new Stack<>();
+            int vis[] = new int[n+1];
+            for(int i=1;i<=n; i++){
+                if(vis[i]==1)continue;
+                dfs(i , vis , st );
+
+            }
+
+
+            for(int i = 0 ; i < ll.size(); i++){
+
+                int a = ll.get(i)[0];
+                int b = ll.get(i)[1];
+                g2[a].add(b);
+
+            }
+
+
+            Arrays.fill(vis , 0);
+          ArrayList<Integer> pp = new ArrayList<>();
+            while(!st.isEmpty()){
+
+                int i = st.pop();
+
+                if(vis[i]==1)continue;
+
+                dfs2(i , vis);
+                pp.add(i);
+            }
+
+
+            if(pp.size() ==1){
+
+                out.println("YES");
+
+              continue;
+            }
+
+            boolean check[] = new boolean[1];
+            Arrays.fill(vis , 0);
+            dfs3(pp.get(0) , pp.get(1) , vis , check);
+
+            out.println("NO");
+            if(check[0]){
+                out.println(pp.get(1) + " " + pp.get(0));
+            }else{
+                out.println(pp.get(0) + "  " + pp.get(1));
+            }
+
+
+            // end of while loop
+        }
+
+
+
+//         Stop measuring execution time
+//        long endTime = System.nanoTime();
+
+        // Calculate the execution time in milliseconds
+//        long executionTime
+//                = (endTime - startTime) / 1000000;
+//
+//        System.out.println(executionTime + " executiontime");
+        // main args static
+  out.flush();
+    }
+
+    private static void dfs3(int u, int found, int[] vis, boolean[] check) {
+
+        if(found == u){
+            check[0]=true;
+
+        }
+
+        vis[u]=1;
+
+        for(int v : g1[u]){
+            if(vis[v] ==1)continue;
+            dfs3(v , found , vis , check);
+        }
+
+
+    }
+
+    private static void dfs2(int i, int[] vis) {
+
+        vis[i]=1;
+
+
+        for(int v : g2[i]){
+
+            if(vis[v]==1)continue;
+
+            dfs2(v , vis);
+
+
+        }
+
+
+
+    }
+
+    private static void dfs(int i, int[] vis, Stack<Integer> st) {
+
+        vis[i]=1;
+
+        for(int v : g1[i]){
+
+            if(vis[v] ==1)continue;
+
+            dfs(v , vis , st);
+
+
+        }
+
+        st.add(i);
+
+    }
+

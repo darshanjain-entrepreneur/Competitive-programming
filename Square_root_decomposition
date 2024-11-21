@@ -1,0 +1,33 @@
+long arr[] = {1,2,3,4,5};
+
+            int n = (int)Math.sqrt(arr.length) +1;
+            long sq[] = new long[n];
+
+            for(int i = 0;   i< arr.length; i++){
+
+                sq[i/n]+=arr[i];
+            }
+
+            System.out.println(Arrays.toString(sq));
+
+            int l = s.nextInt();
+            int r = s.nextInt();
+            long ans = 0;
+            int start = l/n;
+            int end = r/n;
+
+            if(start ==end){
+                for(int i = l;i <=r; i++)ans=ans+arr[i];
+                System.out.println(ans +" ans");
+                continue;
+            }
+            for(int i = start+1; i<=end-1; i++){
+                ans=ans+sq[i];
+            }
+            for(int i = l; i <= (start+1)*(n-1); i++){
+                ans=ans+arr[i];
+            }
+            for(int i = end*n; i<=r; i++){
+                ans=ans+arr[i];
+            }
+            System.out.println(ans);

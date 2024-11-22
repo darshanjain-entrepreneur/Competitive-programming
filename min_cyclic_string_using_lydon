@@ -1,0 +1,25 @@
+public static String minCyclicString(String s) {
+        s = s + s; // Concatenate the string with itself
+        int n = s.length();
+        int i = 0, ans = 0;
+
+        while (i < n / 2) {
+            ans = i;
+            int j = i + 1, k = i;
+
+            while (j < n && s.charAt(k) <= s.charAt(j)) {
+                if (s.charAt(k) < s.charAt(j)) {
+                    k = i; // Reset k to the start of the current substring
+                } else {
+                    k++; // Move k forward
+                }
+                j++; // Move j forward
+            }
+
+            while (i <= k) {
+                i += j - k; // Advance i to skip the redundant comparisons
+            }
+        }
+
+        return s.substring(ans, ans + n / 2); // Return the smallest cyclic rotation
+    }

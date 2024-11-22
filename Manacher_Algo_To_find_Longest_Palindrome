@@ -1,0 +1,121 @@
+ static  class Manacher {
+
+        private int[] arr; // Palindromic radii array
+        private String original; // Original string
+        private String transformed; // Transformed string with separators
+
+        // Constructor
+        public Manacher(String st) {
+            this.original = st;
+            StringBuilder bb = new StringBuilder();
+            for (int i = 0; i < st.length(); i++) {
+                bb.append("#");
+                bb.append(st.charAt(i));
+            }
+            bb.append("#");
+            this.transformed = bb.toString();
+            build(transformed);
+        }
+
+        // Builds the palindromic radii array using Manacher's algorithm
+        private void build(String st) {
+            int n = st.length();
+            arr = new int[n];
+            Arrays.fill(arr, 0);
+
+            int center = 0, right = 0;
+
+            for (int i = 0; i < n; i++) {
+                int mirror = 2 * center - i;
+
+                if (i < right) {
+                    arr[i] = Math.min(right - i, arr[mirror]);
+                }
+
+                // Expand around center
+                while (i + arr[i] + 1 < n && i - arr[i] - 1 >= 0 &&
+                        st.charAt(i + arr[i] + 1) == st.charAt(i - arr[i] - 1)) {
+                    arr[i]++;
+                }
+
+                // Update center and right boundary
+                if (i + arr[i] > right) {
+                    center = i;
+                    right = i + arr[i];
+                }
+            }
+        }
+
+        // Returns the palindromic radii array
+        public int[] findArray() {
+            return arr;
+        }
+
+        // Finds the length of the longest palindrome centered at the given index in the original string
+        public int longestPalindromeAt(int index) {
+            int transformedIndex = 2 * index + 1;
+            return arr[transformedIndex];
+        }
+
+        // Checks if the substring from left to right (inclusive) in the original string is a palindrome
+        public boolean isPalindrome(int left, int right) {
+            if (left > right || left < 0 || right >= original.length()) {
+                return false; // Invalid indices
+            }
+
+            int transformedLeft = 2 * left + 1;
+            int transformedRight = 2 * right + 1;
+
+            int center = (transformedLeft + transformedRight) / 2;
+            int radius = arr[center];
+
+            return radius >= (transformedRight - transformedLeft + 1) / 2;
+        }
+
+        // Finds the length of the longest palindrome in the entire string
+        public int findLongestPalindromeLength() {
+            int maxLength = 0;
+            for (int radius : arr) {
+                maxLength = Math.max(maxLength, radius);
+            }
+            return maxLength;
+        }
+
+        // Finds the longest palindromic substring in the original string
+        public String findLongestPalindromeString() {
+            int maxLength = 0;
+            int centerIndex = 0;
+
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i] > maxLength) {
+                    maxLength = arr[i];
+                    centerIndex = i;
+                }
+            }
+
+            // Calculate the start index in the original string
+            int start = (centerIndex - maxLength) / 2; // Convert transformed index to original index
+            return original.substring(start, start + maxLength);
+        }
+
+        // Main method for testing
+//        public static void main(String[] args) {
+//            String input = "abacdfgdcaba";
+//            Manacher manacher = new Manacher(input);
+//
+//            // Find the length of the longest palindrome centered at index 2
+//            System.out.println("Length of longest palindrome at index 2: " + manacher.longestPalindromeAt(2));
+//
+//            // Check if the substring from index 0 to 3 (inclusive) is a palindrome
+//            System.out.println("Is substring (0, 3) a palindrome? " + manacher.isPalindrome(0, 3));
+//
+//            // Find the longest palindrome length in the entire string
+//            System.out.println("Length of the longest palindrome in the string: " + manacher.findLongestPalindromeLength());
+//
+//            // Find the longest palindromic substring in the string
+//            System.out.println("Longest palindromic substring: " + manacher.findLongestPalindromeString());
+//
+//            // Print the palindromic radii array
+//            System.out.println("Palindromic radii: " + Arrays.toString(manacher.findArray()));
+//        }
+    }

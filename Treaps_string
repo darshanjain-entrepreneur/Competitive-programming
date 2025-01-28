@@ -1,0 +1,184 @@
+
+        static class TreapNode {
+            char value;
+            int priority;
+            int size;
+            boolean reversed;
+            TreapNode left, right;
+
+            public TreapNode(char value) {
+                this.value = value;
+                this.priority = new Random().nextInt();
+                this.size = 1;
+                this.reversed = false;
+            }
+        }
+
+        static class ImplicitTreap {
+            private TreapNode root;
+
+            private int getSize(TreapNode node) {
+                return node == null ? 0 : node.size;
+            }
+
+            private void updateSize(TreapNode node) {
+                if (node != null) {
+                    node.size = 1 + getSize(node.left) + getSize(node.right);
+                }
+            }
+
+            private void propagate(TreapNode node) {
+                if (node != null && node.reversed) {
+                    TreapNode temp = node.left;
+                    node.left = node.right;
+                    node.right = temp;
+                    if (node.left != null) node.left.reversed ^= true;
+                    if (node.right != null) node.right.reversed ^= true;
+                    node.reversed = false;
+                }
+            }
+
+            private TreapNode merge(TreapNode left, TreapNode right) {
+                propagate(left);
+                propagate(right);
+                if (left == null) return right;
+                if (right == null) return left;
+                if (left.priority > right.priority) {
+                    left.right = merge(left.right, right);
+                    updateSize(left);
+                    return left;
+                } else {
+                    right.left = merge(left, right.left);
+                    updateSize(right);
+                    return right;
+                }
+            }
+
+            private void split(TreapNode node, int key, TreapNode[] result) {
+                if (node == null) {
+                    result[0] = result[1] = null;
+                    return;
+                }
+                propagate(node);
+                int currentKey = getSize(node.left);
+                if (key <= currentKey) {
+                    split(node.left, key, result);
+                    node.left = result[1];
+                    result[1] = node;
+                } else {
+                    split(node.right, key - currentKey - 1, result);
+                    node.right = result[0];
+                    result[0] = node;
+                }
+                updateSize(node);
+            }
+
+            public void build(String str) {
+                root = null;
+                for (int i = 0; i < str.length(); i++) {
+                    insert(i, str.charAt(i));
+                }
+            }
+
+            public void insert(int index, char value) {
+                TreapNode newNode = new TreapNode(value);
+                TreapNode[] splitResult = new TreapNode[2];
+                split(root, index, splitResult);
+                root = merge(merge(splitResult[0], newNode), splitResult[1]);
+            }
+
+            public void delete(int index) {
+                TreapNode[] splitResult1 = new TreapNode[2];
+                TreapNode[] splitResult2 = new TreapNode[2];
+                split(root, index, splitResult1);
+                split(splitResult1[1], 1, splitResult2);
+                root = merge(splitResult1[0], splitResult2[1]);
+            }
+
+            public char get(int index) {
+                TreapNode node = root;
+                while (node != null) {
+                    propagate(node);
+                    int currentKey = getSize(node.left);
+                    if (index == currentKey) {
+                        return node.value;
+                    } else if (index < currentKey) {
+                        node = node.left;
+                    } else {
+                        node = node.right;
+                        index -= currentKey + 1;
+                    }
+                }
+                throw new IndexOutOfBoundsException("Index out of bounds");
+            }
+
+            public void reverseRange(int l, int r) {
+                TreapNode[] splitResult1 = new TreapNode[2];
+                TreapNode[] splitResult2 = new TreapNode[2];
+                split(root, l, splitResult1);
+                split(splitResult1[1], r - l + 1, splitResult2);
+                if (splitResult2[0] != null) {
+                    splitResult2[0].reversed ^= true;
+                }
+                root = merge(merge(splitResult1[0], splitResult2[0]), splitResult2[1]);
+            }
+
+            public void replaceSubstring(int l, int r, String replacement) {
+                TreapNode[] splitResult1 = new TreapNode[2];
+                TreapNode[] splitResult2 = new TreapNode[2];
+                split(root, l, splitResult1);
+                split(splitResult1[1], r - l + 1, splitResult2);
+                root = merge(splitResult1[0], splitResult2[1]);
+                for (int i = 0; i < replacement.length(); i++) {
+                    insert(l + i, replacement.charAt(i));
+                }
+            }
+
+            public String extractSubstring(int l, int r) {
+                StringBuilder result = new StringBuilder();
+                for (int i = l; i <= r; i++) {
+                    result.append(get(i));
+                }
+                return result.toString();
+            }
+
+            public void cutAndPasteToEnd(int l, int r) {
+                TreapNode[] splitResult1 = new TreapNode[2];
+                TreapNode[] splitResult2 = new TreapNode[2];
+                split(root, l, splitResult1); // Split at start of the range.
+                split(splitResult1[1], r - l + 1, splitResult2); // Split at end of the range.
+
+                // Cut the range (splitResult2[0]) and paste it to the end.
+                root = merge(splitResult1[0], splitResult2[1]); // Merge remaining parts.
+                root = merge(root, splitResult2[0]); // Append the cut part to the end.
+            }
+
+            public String getString() {
+                StringBuilder result = new StringBuilder();
+                getString(root, result);
+                return result.toString();
+            }
+
+            private void getString(TreapNode node, StringBuilder result) {
+                if (node != null) {
+                    propagate(node);
+                    getString(node.left, result);
+                    result.append(node.value);
+                    getString(node.right, result);
+                }
+            }
+        }
+
+//        public static void main(String[] args) {
+//            ImplicitTreap treap = new ImplicitTreap();
+//            treap.build("helloWorld");
+//
+//            treap.cutAndPasteToEnd(0, 4); // Cut "hello" and paste to the end.
+//            System.out.println("After cut and paste: " + treap.getString());
+//
+//            treap.reverseRange(0, 4); // Reverse "World".
+//            System.out.println("After reverse: " + treap.getString());
+//
+//            treap.replaceSubstring(5, 9, "Java"); // Replace "hello" with "Java".
+//            System.out.println("After replace: " + treap.getString());
+//        }

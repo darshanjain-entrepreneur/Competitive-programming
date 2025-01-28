@@ -1,0 +1,124 @@
+ static HashSet<Integer> g[];
+    static int vis[];
+    static int tin[];
+    static int lo[];
+    static int timer;
+    static int mark[];
+
+    // ----------------------------------------------
+
+    public static void main(String[] args) {
+
+        int T = 1;
+
+//        T = s.nextInt();
+
+
+
+
+//        long startTime = System.nanoTime();
+
+
+        // starting of while loop
+        outer:while (T > 0) {
+            T--;
+
+               int n = s.nextInt();
+               int m = s.nextInt();
+               g = new HashSet[n];
+               mark = new int[n];
+               timer = 0;
+            vis = new int[n];
+            tin = new int[n];
+               lo = new int[n];
+               for(int i = 0; i < n; i++)g[i]=new HashSet<>();
+               for(int i = 0; i < m; i++){
+                   int u = s.nextInt()-1;
+                   int v = s.nextInt()-1;
+                   g[u].add(v);
+                   g[v].add(u);
+               }
+
+               for(int i = 0; i < n; i++){
+
+                   if(vis[i] == 0){
+                       dfs(i , -1);
+                   }
+
+
+               }
+
+               int count = 0;
+               for(int i = 0 ; i < n; i++){
+                   if(mark[i]==1)count++;
+               }
+               out.println(count);
+               for(int i = 0; i < n; i++){
+
+                   if(mark[i]==1){
+                       out.print((i+1) + " ");
+                   }
+
+               }
+out.println();
+
+            // end of while loop
+        }
+
+
+
+//         Stop measuring execution time
+//        long endTime = System.nanoTime();
+
+        // Calculate the execution time in milliseconds
+//        long executionTime
+//                = (endTime - startTime) / 1000000;
+//
+//        System.out.println(executionTime + " executiontime");
+        // main args static
+        out.flush();
+    }
+
+
+
+
+    //----------------------------------question to solve-------------------
+// question to solve
+
+    public static void dfs(int node , int parent){
+
+        tin[node] = lo[node] = timer;
+        vis[node]=1;
+        timer++;
+
+        int child = 0;
+        for(int v : g[node]){
+
+            if(v == parent)continue;
+
+            if(vis[v] == 0){
+                 child++;
+                dfs(v , node);
+                lo[node]=Math.min(lo[node] , lo[v]);
+
+                if(lo[v] >= tin[node] && parent != -1){
+                    mark[node]=1;
+                }
+
+
+            }else{
+
+                lo[node] = Math.min(lo[node] , tin[v]);
+
+            }
+
+
+        }
+
+
+          if(child > 1 && parent == -1){
+              mark[node]=1;
+          }
+
+
+    }

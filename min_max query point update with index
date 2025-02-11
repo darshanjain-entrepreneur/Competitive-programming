@@ -1,0 +1,84 @@
+class SegmentTree {
+    static class Node {
+        int minVal, minIdx, maxVal, maxIdx;
+        Node(int minVal, int minIdx, int maxVal, int maxIdx) {
+            this.minVal = minVal;
+            this.minIdx = minIdx;
+            this.maxVal = maxVal;
+            this.maxIdx = maxIdx;
+        }
+    }
+
+    private Node[] tree;
+    private int n;
+
+    public SegmentTree(int[] arr) {
+        n = arr.length;
+        tree = new Node[4 * n];
+        build(arr, 0, 0, n - 1);
+    }
+
+    private void build(int[] arr, int node, int start, int end) {
+        if (start == end) {
+            tree[node] = new Node(arr[start], start, arr[start], start);
+        } else {
+            int mid = (start + end) / 2;
+            build(arr, 2 * node + 1, start, mid);
+            build(arr, 2 * node + 2, mid + 1, end);
+            tree[node] = merge(tree[2 * node + 1], tree[2 * node + 2]);
+        }
+    }
+
+    private Node merge(Node left, Node right) {
+        int minVal = Math.min(left.minVal, right.minVal);
+        int minIdx = (left.minVal <= right.minVal) ? left.minIdx : right.minIdx;
+        int maxVal = Math.max(left.maxVal, right.maxVal);
+        int maxIdx = (left.maxVal >= right.maxVal) ? left.maxIdx : right.maxIdx;
+        return new Node(minVal, minIdx, maxVal, maxIdx);
+    }
+
+    public void update(int index, int value) {
+        update(0, 0, n - 1, index, value);
+    }
+
+    private void update(int node, int start, int end, int index, int value) {
+        if (start == end) {
+            tree[node] = new Node(value, index, value, index);
+        } else {
+            int mid = (start + end) / 2;
+            if (index <= mid) update(2 * node + 1, start, mid, index, value);
+            else update(2 * node + 2, mid + 1, end, index, value);
+            tree[node] = merge(tree[2 * node + 1], tree[2 * node + 2]);
+        }
+    }
+
+    public Node query(int left, int right) {
+        return query(0, 0, n - 1, left, right);
+    }
+
+    private Node query(int node, int start, int end, int left, int right) {
+        if (left > end || right < start) return new Node(Integer.MAX_VALUE, -1, Integer.MIN_VALUE, -1);
+        if (left <= start && end <= right) return tree[node];
+        int mid = (start + end) / 2;
+        Node leftRes = query(2 * node + 1, start, mid, left, right);
+        Node rightRes = query(2 * node + 2, mid + 1, end, left, right);
+        return merge(leftRes, rightRes);
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {5, 2, 6, 1, 9, 3};
+        SegmentTree segTree = new SegmentTree(arr);
+
+        // Query min & max from index 1 to 4
+        Node res = segTree.query(0, 1);
+        System.out.println("Min: " + res.minVal + " at index " + res.minIdx);
+        System.out.println("Max: " + res.maxVal + " at index " + res.maxIdx);
+
+        // Update index 2 to value 0
+        segTree.update(2, 0);
+        res = segTree.query(1, 4);
+        System.out.println("After update:");
+        System.out.println("Min: " + res.minVal + " at index " + res.minIdx);
+        System.out.println("Max: " + res.maxVal + " at index " + res.maxIdx);
+    }
+}

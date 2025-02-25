@@ -1,0 +1,794 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.util.*;
+import java.util.StringTokenizer;
+import java.util.Random;
+import java.util.TreeMap;
+
+
+
+
+
+public class Main {
+
+
+
+
+
+    /**
+     *    author:  Darshan Jain
+     *    created: 09:8:24
+     **/
+
+
+    /** Darshan Jain
+     greatest of all time
+     will reach lgm one day
+     i will be the best one day and will destroy everyone
+
+     start solving more 2000 - 2200 rated problems to reach master on codeforces
+     try solving hard dp problems and graph problems to improve and don't fear that
+     you can;t do it just believe in your self and you will be able to do it.
+     if string s than think about hashing
+     if nothing is you are getting then thinks about brute force
+     try to write shorter code and improve your ability to write shorter code
+     first think and then write code of what you want to write
+     practice harder leetcode problems and also solve div2d and e will improve your skills
+     pigeon hole principle
+
+     **/
+
+    /**
+     // for solving problems
+
+
+
+
+
+
+     */
+
+
+
+
+
+
+//        static Scanner s= new Scanner(System.in);
+    static  PrintWriter out = new PrintWriter(System.out);
+    static  FastReader s = new FastReader();
+
+
+
+    static int N = (int)(2e5)+5;
+
+    static long mod1 = (long)(998244353);
+    static long mod2 = (long)((long)(1e9)+7);
+
+
+    static  Random rand = new Random();
+
+    // for globally declare variable
+    // ---------------------------------------------
+
+
+
+
+    // ----------------------------------------------
+
+    public static void main(String[] args) {
+
+        int T = 1;
+
+        T = s.nextInt();
+
+
+
+
+//        long startTime = System.nanoTime();
+
+
+        // starting of while loop
+        outer:while (T > 0) {
+            T--;
+
+            
+
+
+
+            // end of while loop
+        }
+
+
+
+//         Stop measuring execution time
+//        long endTime = System.nanoTime();
+
+        // Calculate the execution time in milliseconds
+//        long executionTime
+//                = (endTime - startTime) / 1000000;
+//
+//        System.out.println(executionTime + " executiontime");
+        // main args static
+        out.flush();
+    }
+
+
+
+    //----------------------------------question to solve-------------------
+// question to solve
+
+
+
+// question to end-----------------------------------------------------------------
+
+    // the codes for use
+//   public  static void Sieve(int prime[] , int k[])
+//    {
+//        // Initialize k[i] to i
+//        for (int i = 1; i < (int)(1e7)+1; i++)
+//            k[i] = i;
+//
+//        // Prime Sieve
+//        for (int i = 2; i < (int)(1e7)+1; i++) {
+//
+//            // If i is prime then remove all
+//            // factors of prime from it
+//            if (prime[i] == 0)
+//                for (int j = i; j <(int)(1e7)+1; j += i) {
+//
+//                    // Update that j is not
+//                    // prime
+//                    prime[j] = 1;
+//
+//                    // Remove all square divisors
+//                    // i.e. if k[j] is divisible
+//                    // by i*i then divide it by i*i
+//                    while (k[j] % (i *1L* i) == 0)
+//                        k[j] /= (i *1L* i);
+//                }
+//        }
+//    }
+
+
+
+    // count inversions
+
+//    static long countInversions(long arr[], int N)
+//    {
+//        long count[]=new long[1];
+//        mergeSort(arr,0,N-1 , count);
+//        long temp = count[0];
+//        count[0] = 0;
+//        return  temp;
+//    }
+//    static long[] mergeSort(long[] arr, int l, int h , long count[])
+//    {
+//        if(l==h)
+//        {
+//            long ans[] = new long[1];
+//            ans[0] = arr[l];
+//            return ans;
+//        }
+//        long[] left =  mergeSort(arr,l,(l+h)/2 , count);
+//        long[] right = mergeSort(arr,((l+h)/2)+1,h , count);
+//
+//        return merge(left,right , count);
+//    }
+//    static long[] merge(long[] l, long r[] , long count[])
+//    {
+//        int l1 = l.length, l2 = r.length;
+//        long[] ans = new long[l1+l2];
+//        int i=0,j=0,ind=0;
+//
+//        while(i<l1||j<l2)
+//        {
+//            if(i==l1)
+//                ans[ind++] = r[j++];
+//            else if(j==l2)
+//                ans[ind++] = l[i++];
+//            else if(l[i]<r[j])
+//                ans[ind++] = l[i++];
+//            else
+//            {
+//                ans[ind++] = r[j++];
+//                count[0] += (l1-i);
+//            }
+//        }
+//        return ans;
+//    }
+
+    // tro create all permutataions
+//    public static List<List<Integer>> permute(int[] nums) {
+//        List<List<Integer>> result = new ArrayList<>();
+//        backtrack(result, new ArrayList<>(), nums);
+//        return result;
+//    }
+//
+//    private static void backtrack(List<List<Integer>> result, List<Integer> tempList, int[] nums) {
+//        if (tempList.size() == nums.length) {
+//            result.add(new ArrayList<>(tempList));
+//        } else {
+//            for (int i = 0; i < nums.length; i++) {
+//                if (tempList.contains(nums[i])) continue; // element already exists, skip
+//                tempList.add(nums[i]);
+//                backtrack(result, tempList, nums);
+//                tempList.remove(tempList.size() - 1);
+//            }
+//        }
+//    }
+
+
+
+
+    // for printing different values
+
+
+    private static void print(long a){
+        System.out.println(a);
+    }
+
+    private static void print(char a){
+
+        System.out.println(a);
+    }
+
+    private static void print(String s){
+        System.out.println(s);
+    }
+
+    public static <T> void print(T[] arr) {
+        System.out.println(Arrays.toString(arr));
+    }
+    public static <T> void print(T[][] arr) {
+        for(T p[] :arr ){
+            System.out.println(Arrays.toString(p));
+        }
+    }
+    public static  void print(int[] arr) {
+        System.out.println(Arrays.toString(arr));
+    }
+    public static  void print(long[] arr) {
+        System.out.println(Arrays.toString(arr));
+    }  public static  void print(double[] arr) {
+        System.out.println(Arrays.toString(arr));
+    }
+    public static  void print(String[] arr) {
+        System.out.println(Arrays.toString(arr));
+    }
+
+    private static void print(int arr[][]){
+        for(int temp[] : arr){
+            System.out.println(Arrays.toString(temp));
+        }
+    }
+    private static void print(long arr[][]){
+        for(long temp[] : arr){
+
+            System.out.println(Arrays.toString(temp));
+        }
+    }
+    private static void print(double arr[][]){
+        for(double temp[] : arr){
+
+            System.out.println(Arrays.toString(temp));
+        }
+    } private static void print(String arr[][]){
+        for(String temp[] : arr){
+
+            System.out.println(Arrays.toString(temp));
+        }
+    }
+
+
+
+    private static   void print(ArrayList<long[]> pp){
+
+        for(long temp[] : pp){
+
+            System.out.println(Arrays.toString(temp));
+        }
+
+    }
+
+
+
+    public static <K, V> void print(HashMap<K, V> map) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+    }
+    public static <K, V> void print(TreeMap<K, V> map) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+    }
+
+    private static <T> void print(HashSet<T> st){
+
+        for(T i : st){
+            System.out.println(i);
+        }
+
+    }
+    private static <T> void print(TreeSet<T> st){
+
+        for(T i : st){
+            System.out.println(i);
+        }
+
+    }
+
+
+
+    // reading array
+
+
+
+    // log2 base with option of both ceil adn floor
+
+    public static int log2(int N , int ceil)
+    {
+
+        // calculate log2 N indirectly
+        // using log() method
+        int result = (int)(Math.log(N) / Math.log(2));
+
+        return result +ceil;
+    }
+
+
+    // sort reverse
+
+
+
+
+    // sieve to store smallest factor of each number
+
+    public static long[] smallestPrimeFactor(long N) {
+        long[] spf = new long[(int)N + 1];
+        for (long i = 1; i <= N; i++) {
+            spf[(int)i] = i;
+        }
+
+        for (long i = 2; i * i <= N; i++) {
+            if (spf[(int)i] == i) {
+                for (long j = i * i; j <= N; j += i) {
+                    if (spf[(int)j] == j) {
+                        spf[(int)j] = i;
+                    }
+                }
+            }
+        }
+
+        return spf;
+    }
+
+    // creation of graph
+
+
+
+
+
+
+    //    static long power(long x, long y, long p) {
+//        // Initialize result
+//        long res = 1;
+//
+//        // Update x if it is more than or equal to p
+//        x = x % p;
+//
+//        while (y > 0) {
+//            // If y is odd, multiply x with result
+//            if (y % 2 == 1)
+//                res = (res * x) % p;
+//
+//            // y must be even now
+//            y = y >> 1; // y = y/2
+//            x = (x * x) % p;
+//        }
+//
+//        return res;
+//    }
+//
+//    // Returns n^(-1) mod p
+//    static long modInverse(long n, long p) {
+//        return power(n, p - 2, p);
+//    }
+//
+//    // Returns nCr % p using Fermat's little theorem.
+    static long nCrModPFermat(long n, long r, long p , long fac[]) {
+
+        if (r == 0)
+            return 1;
+
+        if (n<r || n < 0 || r < 0)   return 0;
+
+        // Base case
+
+
+        // Fill factorial array so that we can find all factorial of r, n and n-r
+
+
+        return (fac[(int)n] * modInverse(fac[(int)r], p) % p * modInverse(fac[(int)(n - r)], p) % p) % p;
+    }
+
+
+    static long nCr(long n, long r, long p , long fac[] , long infac[]) {
+
+        if (r == 0)
+            return 1;
+
+        if (n<r || n < 0 || r < 0)   return 0;
+
+        // Base case
+
+
+        // Fill factorial array so that we can find all factorial of r, n and n-r
+
+
+        return (fac[(int)n] * infac[(int)r] % p * infac[(int)(n - r)] % p) % p;
+    }
+
+
+//
+
+
+
+
+
+
+//          public   static  long nCr(long n, long r,long mod , long fac[] , long ifac[])
+//    {
+//
+//        if (n<r)
+//            return 0;
+//        // Base case
+//        if (r == 0)
+//            return 1;
+//
+//
+//
+//        return (fac[(int)n] * ifac[(int)r]
+//                %mod * ifac[(int)(n-r)]
+//                % mod)
+//                % mod;
+//    }
+
+
+    public static long modAdd(long a, long b, long m) {
+        return ((a % m) + (b % m)) % m;
+    }
+
+    //
+//    // Function to perform Modular Subtraction for long numbers
+    public  static long modSub(long a, long b, long m) {
+        return ((a % m) - (b % m) + m) % m; // Adding m to handle negative numbers
+    }
+    //////
+////    // Function to perform Modular Multiplication for long numbers
+    public  static long modMul(long a, long b, long m) {
+        return ((a % m) * (b % m)) % m;
+    }
+    ////
+////    // Function to calculate power of a number for long numbers
+    public  static long power(long x, long y, long p) {
+        long res = 1;
+        x = x % p;
+        if (x == 0)
+            return 0;
+        while (y > 0) {
+            if ((y & 1) == 1)
+                res = (res%p * x%p) % p;
+            y = y >> 1;
+            x = (x * x) % p;
+        }
+        return res;
+    }
+
+    // Function to find modular inverse of a under modulo m for long numbers
+    // Assumption: m is prime
+    public  static long modInverse(long a, long m) {
+        return power(a, m - 2, m);
+    }
+
+    // Function to perform Modular Division for long numbers
+    public  static long modDiv(long a, long b, long m) {
+        a = a % m;
+        long inv = modInverse(b, m);
+        return (inv * a) % m;
+    }
+
+
+
+
+
+//    public static long modpower(long x, long n, int m) {
+//        if (n == 0) //base case
+//            return 1 % m;
+//        long u = modpower(x, n / 2, m);
+//        u = (u * u) % m;
+//        if (n % 2 == 1) // when 'n' is odd
+//            u = (u * x) % m;
+//        return (int)u;
+//    }
+
+
+
+
+    // gcd and lcm
+
+    private static long lcm(long a,long b) {
+//
+        long x = a*b;
+
+        long gcdd  = gcd(a,b);
+
+        long lcmm = x/gcdd;
+        return lcmm;
+//
+    }
+////
+
+
+
+
+    private static long gcd( long  a, long  b) {
+        if(a == 0){
+
+            return b;
+        }
+
+        return gcd(b%a , a);
+    }
+
+
+    // to find modulo inverse
+
+
+    // sorting the string
+
+    public static String  sortstring(String a){
+
+        char brr[] = a.toCharArray();
+        Arrays.sort(brr);
+
+        return  a = new String(brr);
+
+    }
+
+
+
+
+    // new way t find smallest prime number using sieve in much faster way
+
+//    long primes[] = new long[(int)(1e7)+1];
+//
+//    primes[0] = 0;
+//    primes[1] = 1;
+//
+//        for(int i = 2; i<= (int)(1e7); i++){
+//
+//        primes[i] = i;
+//    }
+//
+//
+//        for(long i = 2; i<=(int)(1e7); i++){
+//
+//        if(primes[(int) i] == i){
+//
+//            for(long j = i*i; j<=(int)(1e7); j= j+i){
+//
+//                if(primes[(int) j]==j){
+//                    primes[(int) j] = i;
+//                }
+//
+//            }
+//
+//        }
+//
+//
+//    }
+
+
+
+
+
+
+
+
+    // bitwise xor 1 to n
+
+//    public  static long bitwisexor(long n){
+//
+//        if(n%4 == 0){
+//            return n;
+//        }
+//        if(n%4 == 1){
+//            return 1;
+//        }
+//        if(n%4 == 2){
+//            return n+1;
+//        }
+//        if(n%4 == 3){
+//            return 0;
+//        }
+//
+//        return -1;
+//    }
+
+
+
+
+    //bitwise method to find and in a range
+
+//    public static   long bitwise(long a , long b){
+//
+//        int count = 0;
+//
+//        while(a!=b){
+//
+//            a = a>>1;
+//            b = b>>1;
+//            count++;
+//
+//        }
+//
+//
+//        return a<<count;
+//    }
+
+    // square root new technique
+
+    public static long getSquareRoot(long x) {
+        long v = (long) Math.sqrt(x);  // Initial approximation by casting to long
+
+        while (v * v > x) {
+            v--;
+        }
+
+        while ((v + 1) * (v + 1) <= x) {
+            v++;
+        }
+
+        return v;
+    }
+
+
+
+
+    // precomputation
+
+
+    // count inversions
+
+
+
+
+
+    //     function for fast sorting
+    public static  void reversesort(long   arr[]){
+        ArrayList<Long> ll = new ArrayList<>();
+        for(int i = 0; i < arr.length; i++){
+            ll.add(arr[i]);
+        }
+        Collections.sort(ll);
+        Collections.reverse(ll);
+        for(int i = 0; i < ll.size(); i++){
+            arr[i] = ll.get(i);
+        }
+        ll.clear();
+    }
+
+    public static  void  sort(long  arr[]){
+        ArrayList<Long> ll = new ArrayList<>();
+        for(int i = 0; i < arr.length; i++){
+            ll.add(arr[i]);
+        }
+        Collections.sort(ll);
+
+        for(int i = 0; i < ll.size(); i++){
+            arr[i] = ll.get(i);
+        }
+        ll.clear();
+    }
+
+
+    // input method
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastReader()
+        {
+            br = new BufferedReader(
+                    new InputStreamReader(System.in));
+        }
+
+        String next()
+        {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+
+
+        int nextInt() { return Integer.parseInt(next()); }
+
+
+
+        long nextLong() { return Long.parseLong(next()); }
+
+        long[] readArrayLong(int n){
+
+            long arr[] = new long[n];
+            for(int i = 0 ; i <n; i++){
+                arr[i] = Long.parseLong(next());
+            }
+            return arr;
+        }
+
+        String[] readArrayString(int n){
+
+            String arr[] = new String[n];
+
+            for(int i = 0 ; i  < n; i++){
+                arr[i] = next();
+            }
+            return arr;
+        }
+        double[] readArrayDouble(int n){
+
+            double arr[] = new double[n];
+            for(int i = 0 ; i <n; i++){
+                arr[i] = Double.parseDouble(next());
+            }
+            return arr;
+        }
+        int[] readArrayInt(int n){
+
+            int  arr[] = new int[n];
+            for(int i = 0 ; i <n; i++){
+                arr[i] = Integer.parseInt(next());
+            }
+            return arr;
+        }
+
+
+
+        double nextDouble()
+        {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine()
+        {
+            String str = "";
+            try {
+                if(st.hasMoreTokens()){
+                    str = st.nextToken("\n");
+                }
+                else{
+                    str = br.readLine();
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
+
+
+
+}
+

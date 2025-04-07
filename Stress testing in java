@@ -1,0 +1,62 @@
+import java.util.*;
+
+public class StressTester {
+    private final int testCount;
+    private final Random rand;
+
+    public StressTester(int testCount) {
+        this.testCount = testCount;
+        this.rand = new Random();
+    }
+
+    // Call this to start stress testing
+    public void run() {
+        for (int t = 1; t <= testCount; t++) {
+            int[] testCase = generateTestCase();
+
+            int expected = bruteForceSolution(testCase);
+            int actual = optimizedSolution(testCase);
+
+            if (expected != actual) {
+                System.out.println("Test case failed!");
+                System.out.println("Input: " + Arrays.toString(testCase));
+                System.out.println("Brute Output: " + expected);
+                System.out.println("Optimized Output: " + actual);
+                return;
+            } else {
+                System.out.println("Test " + t + " passed.");
+            }
+        }
+        System.out.println("All tests passed.");
+    }
+
+    // Example test case generator (can be overridden)
+    protected int[] generateTestCase() {
+        int n = rand.nextInt(10) + 1;
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = rand.nextInt(100);
+        }
+        return arr;
+    }
+
+    // Brute-force solution (can be overridden)
+    protected int bruteForceSolution(int[] arr) {
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = i; j <= i; j++) {
+                max = Math.max(max, arr[j]);
+            }
+        }
+        return max;
+    }
+
+    // Optimized solution (can be overridden)
+    protected int optimizedSolution(int[] arr) {
+        int max = arr[0];
+        for (int val : arr) {
+            max = Math.max(max, val);
+        }
+        return max;
+    }
+}
